@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Digital Hope Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+<!-- Fluent Emoji 3D icons via CDN -->
+<style>
+  .icon3d { width:52px; height:52px; object-fit:contain; display:block; filter:drop-shadow(0 6px 12px rgba(0,0,0,0.15)); transition:transform .3s; }
+  .icon3d-lg { width:64px; height:64px; object-fit:contain; display:block; filter:drop-shadow(0 8px 16px rgba(0,0,0,0.18)); transition:transform .35s; }
+  .icon3d-sm { width:36px; height:36px; object-fit:contain; display:block; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.13)); transition:transform .3s; }
+  .icon3d-wrap { display:flex; align-items:center; justify-content:center; }
+  *:hover > .icon3d, *:hover > .icon3d-lg { transform: scale(1.12) rotate(-4deg); }
+  *:hover > .icon3d-sm { transform: scale(1.15); }
+</style>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+
+:root {
+  --c-bg:       #d6ecfa;
+  --c-bg2:      #c5e2f7;
+  --c-bg3:      #e2f2ff;
+  --c-navy:     #16385a;
+  --c-blue:     #3a80b8;
+  --c-blue-lt:  #6aaad4;
+  --c-sky:      #a8d4f0;
+  --c-glass:    rgba(255,255,255,0.68);
+  --c-glass2:   rgba(255,255,255,0.42);
+  --c-border:   rgba(140,200,240,0.45);
+  --c-text:     #385570;
+  --c-muted:    #6a90b0;
+  --r-card:     22px;
+  --shadow-sm:  0 4px 20px rgba(80,150,210,0.12);
+  --shadow-md:  0 12px 40px rgba(80,150,210,0.18);
+  --shadow-lg:  0 24px 64px rgba(80,150,210,0.2);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(155deg, #daeffe 0%, #c5e1f7 30%, #cfe8fa 60%, #e2f3ff 100%);
+  min-height:100vh;
+  color: var(--c-navy);
+  overflow-x: hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:7px; }
+::-webkit-scrollbar-track { background:var(--c-bg3); }
+::-webkit-scrollbar-thumb { background:var(--c-sky); border-radius:4px; }
+
+/* ─── NAV ─── */
+#navbar {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  height:66px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 6%;
+  background:rgba(210,237,255,0.72);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--c-border);
+  transition:background .3s, box-shadow .3s;
+}
+#navbar.scrolled {
+  background:rgba(215,240,255,0.88);
+  box-shadow:0 4px 24px rgba(80,150,210,0.13);
+}
+.nav-brand {
+  font-family:'Playfair Display',serif;
+  font-size:19px; color:var(--c-navy);
+  display:flex; align-items:center; gap:9px;
+  text-decoration:none;
+}
+.nav-brand em { color:var(--c-blue); font-style:italic; }
+.nav-links {
+  display:flex; list-style:none; gap:28px;
+}
+.nav-links a {
+  font-size:13.5px; font-weight:500; color:var(--c-text);
+  text-decoration:none; letter-spacing:.3px;
+  position:relative; padding-bottom:2px;
+  transition:color .2s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:0; left:0;
+  width:0; height:1.5px; background:var(--c-blue);
+  transition:width .25s;
+}
+.nav-links a:hover { color:var(--c-blue); }
+.nav-links a:hover::after { width:100%; }
+.nav-cta {
+  background:var(--c-navy); color:#fff;
+  border:none; border-radius:30px;
+  padding:10px 22px; font-size:13px; font-weight:600;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+  transition:background .2s, transform .2s, box-shadow .2s;
+  box-shadow:0 4px 16px rgba(22,56,90,0.25);
+}
+.nav-cta:hover { background:var(--c-blue); transform:translateY(-1px); box-shadow:0 6px 20px rgba(58,128,184,0.3); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+.hamburger span { width:24px; height:2px; background:var(--c-navy); border-radius:2px; transition:all .3s; display:block; }
+.mobile-menu {
+  display:none; position:fixed; top:66px; left:0; right:0; z-index:190;
+  background:rgba(220,242,255,0.97); backdrop-filter:blur(20px);
+  padding:20px 6% 28px;
+  border-bottom:1px solid var(--c-border);
+  flex-direction:column; gap:4px;
+}
+.mobile-menu.open { display:flex; }
+.mobile-menu a {
+  font-size:15px; font-weight:500; color:var(--c-navy);
+  text-decoration:none; padding:12px 0;
+  border-bottom:1px solid rgba(140,200,240,0.2);
+  transition:color .2s;
+}
+.mobile-menu a:hover { color:var(--c-blue); }
+
+/* ─── HERO ─── */
+#hero {
+  min-height:100vh;
+  display:flex; align-items:center;
+  padding:100px 6% 70px;
+  position:relative; overflow:hidden;
+}
+.hero-orb {
+  position:absolute; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, rgba(100,180,240,0.2) 0%, transparent 68%);
+}
+.hero-orb-1 { width:750px; height:750px; top:-220px; right:-180px; animation:drift1 12s ease-in-out infinite; }
+.hero-orb-2 { width:550px; height:550px; bottom:-120px; left:-120px; animation:drift2 15s ease-in-out infinite; }
+.hero-orb-3 { width:320px; height:320px; top:40%; left:35%; animation:drift3 9s ease-in-out infinite; }
+@keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,20px)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-25px)} }
+@keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-15px,15px)} }
+
+.hero-inner {
+  max-width:1120px; width:100%; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+  position:relative; z-index:1;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:9px;
+  background:var(--c-glass); border:1px solid var(--c-border);
+  border-radius:30px; padding:7px 18px;
+  font-size:11.5px; font-weight:600; color:var(--c-blue);
+  letter-spacing:1.8px; text-transform:uppercase; margin-bottom:26px;
+}
+.badge-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--c-blue-lt);
+  animation:badge-pulse 2s infinite;
+}
+@keyframes badge-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,4.2vw,60px);
+  line-height:1.08; font-weight:700; color:var(--c-navy);
+  margin-bottom:24px; letter-spacing:-1.5px;
+}
+.hero h1 em { color:var(--c-blue); font-style:italic; }
+.hero-sub {
+  font-size:15.5px; line-height:1.8; color:var(--c-text);
+  max-width:430px; margin-bottom:38px; font-weight:300;
+}
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+.btn-primary {
+  background:var(--c-navy); color:#fff;
+  padding:14px 30px; border-radius:40px;
+  font-size:14px; font-weight:600; font-family:'DM Sans',sans-serif;
+  border:none; cursor:pointer;
+  transition:all .25s;
+  box-shadow:0 6px 24px rgba(22,56,90,0.28);
+}
+.btn-primary:hover { background:var(--c-blue); transform:translateY(-2px); box-shadow:0 10px 30px rgba(58,128,184,0.32); }
+.btn-outline {
+  background:var(--c-glass); color:var(--c-navy);
+  padding:14px 30px; border-radius:40px;
+  font-size:14px; font-weight:600; font-family:'DM Sans',sans-serif;
+  border:1.5px solid var(--c-border); cursor:pointer;
+  backdrop-filter:blur(8px); transition:all .25s;
+}
+.btn-outline:hover { border-color:var(--c-blue); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+
+/* Hero Stats Card */
+.hero-stats-card {
+  background:var(--c-glass);
+  border:1px solid var(--c-border);
+  border-radius:28px; padding:44px;
+  backdrop-filter:blur(22px);
+  box-shadow:var(--shadow-lg);
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.stat-row { margin-bottom:32px; }
+.stat-row:last-child { margin-bottom:0; }
+.stat-num {
+  font-family:'Playfair Display',serif;
+  font-size:46px; color:var(--c-blue); font-weight:700; line-height:1;
+}
+.stat-label { font-size:13px; color:var(--c-muted); font-weight:500; margin-top:4px; letter-spacing:.3px; }
+.stat-bar { height:3px; border-radius:2px; background:rgba(140,200,240,0.25); margin-top:8px; }
+.stat-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--c-sky),var(--c-blue-lt)); }
+.stat-divider { height:1px; background:rgba(140,200,240,0.28); margin:24px 0; }
+
+/* ─── GENERIC SECTION ─── */
+.section {
+  padding:110px 6%;
+  position:relative;
+}
+.section-alt {
+  background:rgba(255,255,255,0.28);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(160,215,245,0.28);
+  border-bottom:1px solid rgba(160,215,245,0.28);
+}
+.section-inner { max-width:1120px; margin:0 auto; }
+.section-eyebrow {
+  font-size:11px; letter-spacing:3.5px; text-transform:uppercase;
+  color:var(--c-blue-lt); font-weight:600; margin-bottom:14px;
+}
+.section-heading {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,3.2vw,44px);
+  font-weight:700; color:var(--c-navy);
+  line-height:1.13; margin-bottom:18px; letter-spacing:-0.8px;
+}
+.section-heading em { color:var(--c-blue); font-style:italic; }
+.section-body {
+  font-size:15.5px; line-height:1.82; color:var(--c-text);
+  max-width:540px; font-weight:300;
+}
+
+/* ─── FADE ANIMATION ─── */
+.reveal {
+  opacity:0; transform:translateY(32px);
+  transition:opacity .75s ease, transform .75s ease;
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal-delay-1 { transition-delay:.1s; }
+.reveal-delay-2 { transition-delay:.2s; }
+.reveal-delay-3 { transition-delay:.3s; }
+.reveal-delay-4 { transition-delay:.4s; }
+
+/* ─── PROBLEM ─── */
+.problem-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:60px;
+  align-items:center; margin-top:64px;
+}
+.problem-cards { display:flex; flex-direction:column; gap:20px; }
+.problem-card {
+  background:var(--c-glass); border:1px solid var(--c-border);
+  border-radius:var(--r-card); padding:28px 32px;
+  backdrop-filter:blur(16px);
+  display:flex; gap:20px; align-items:flex-start;
+  transition:transform .3s, box-shadow .3s;
+  cursor:default;
+}
+.problem-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); }
+.p-icon {
+  width:52px; height:52px; border-radius:16px; flex-shrink:0;
+  background:linear-gradient(135deg,var(--c-sky),var(--c-bg3));
+  display:flex; align-items:center; justify-content:center; font-size:24px;
+}
+.problem-card h3 { font-size:15.5px; font-weight:600; margin-bottom:8px; }
+.problem-card p { font-size:14px; color:var(--c-text); line-height:1.7; font-weight:300; }
+
+/* ─── SOLUTION ─── */
+.solution-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:64px;
+}
+.sol-card {
+  background:var(--c-glass2); border:1px solid var(--c-border);
+  border-radius:24px; padding:36px;
+  backdrop-filter:blur(20px); position:relative; overflow:hidden;
+  transition:transform .3s, box-shadow .3s; cursor:default;
+}
+.sol-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); }
+.sol-card::before {
+  content:attr(data-n); position:absolute;
+  top:-16px; right:18px;
+  font-family:'Playfair Display',serif;
+  font-size:110px; color:rgba(100,175,230,0.07);
+  font-weight:700; pointer-events:none; user-select:none;
+  line-height:1;
+}
+.sol-emoji { font-size:36px; margin-bottom:18px; display:block; line-height:1; }
+.sol-emoji img { display:block; }
+.sol-card h3 { font-size:17px; font-weight:600; margin-bottom:12px; }
+.sol-card p { font-size:14px; color:var(--c-text); line-height:1.72; font-weight:300; }
+
+/* ─── OUTCOMES ─── */
+.outcomes-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:22px; margin-top:64px;
+}
+.out-card {
+  background:var(--c-glass); border:1px solid var(--c-border);
+  border-radius:22px; padding:32px 24px; text-align:center;
+  backdrop-filter:blur(16px);
+  transition:transform .3s, box-shadow .3s; cursor:default;
+}
+.out-card:hover { transform:translateY(-7px); box-shadow:var(--shadow-md); }
+.out-emoji { font-size:38px; margin-bottom:16px; display:flex; justify-content:center; align-items:center; min-height:64px; }
+.out-card h3 { font-size:15px; font-weight:600; margin-bottom:10px; }
+.out-card p { font-size:13.5px; color:var(--c-text); line-height:1.68; font-weight:300; }
+
+/* ─── SCOPE ─── */
+.scope-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:64px;
+  align-items:center; margin-top:64px;
+}
+.scope-pills { display:flex; flex-wrap:wrap; gap:11px; margin-top:28px; }
+.pill {
+  background:var(--c-glass); border:1px solid rgba(140,200,240,0.4);
+  border-radius:30px; padding:9px 18px;
+  font-size:13px; font-weight:500; color:var(--c-navy);
+  display:flex; align-items:center; gap:8px;
+  backdrop-filter:blur(8px);
+  transition:transform .2s, box-shadow .2s;
+  cursor:default;
+}
+.pill:hover { transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+.scope-visual {
+  background:var(--c-glass); border:1px solid var(--c-border);
+  border-radius:28px; padding:44px;
+  backdrop-filter:blur(22px); box-shadow:var(--shadow-lg);
+}
+.scope-item { display:flex; align-items:flex-start; gap:18px; margin-bottom:30px; }
+.scope-item:last-child { margin-bottom:0; }
+.scope-dot {
+  width:48px; height:48px; border-radius:15px; flex-shrink:0;
+  background:linear-gradient(135deg,var(--c-sky),var(--c-bg3));
+  display:flex; align-items:center; justify-content:center; font-size:22px;
+}
+.scope-item h4 { font-size:14.5px; font-weight:600; margin-bottom:5px; }
+.scope-item p { font-size:13.5px; color:var(--c-text); line-height:1.65; font-weight:300; }
+
+/* ─── RISK ─── */
+.risk-wrapper { margin-top:56px; }
+.risk-box {
+  background:rgba(255,250,225,0.6); border:1px solid rgba(230,195,90,0.35);
+  border-radius:24px; padding:44px 52px;
+  backdrop-filter:blur(16px);
+  display:flex; gap:28px; align-items:flex-start;
+  max-width:820px;
+  box-shadow:0 10px 40px rgba(200,160,50,0.09);
+  transition:transform .3s;
+}
+.risk-box:hover { transform:translateY(-4px); }
+.risk-emoji { font-size:46px; flex-shrink:0; line-height:1; margin-top:2px; }
+.risk-box h3 { font-size:20px; font-weight:600; margin-bottom:14px; color:#6e4b00; }
+.risk-box p { font-size:15px; line-height:1.78; color:#5e4200; font-weight:300; }
+.risk-tag {
+  display:inline-block;
+  background:rgba(240,200,80,0.25); border:1px solid rgba(220,175,60,0.35);
+  border-radius:20px; padding:5px 14px;
+  font-size:12px; font-weight:600; color:#7a5800;
+  margin-top:16px; letter-spacing:.4px;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background:var(--c-navy); padding:70px 6% 44px;
+  position:relative; overflow:hidden;
+}
+footer::before {
+  content:''; position:absolute; top:-80px; right:-100px;
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle, rgba(100,180,240,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.footer-inner {
+  max-width:1120px; margin:0 auto;
+  display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:60px;
+}
+.footer-brand h2 {
+  font-family:'Playfair Display',serif;
+  font-size:24px; color:#fff; margin-bottom:14px;
+}
+.footer-brand h2 em { color:var(--c-sky); font-style:italic; }
+.footer-brand p { font-size:14px; color:rgba(255,255,255,0.6); line-height:1.8; font-weight:300; max-width:280px; }
+.footer-col h4 { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:18px; font-weight:600; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col a { font-size:14px; color:rgba(255,255,255,0.65); text-decoration:none; transition:color .2s; font-weight:300; }
+.footer-col a:hover { color:#fff; }
+.footer-divider { height:1px; background:rgba(255,255,255,0.1); margin:44px 0 24px; max-width:1120px; margin-left:auto; margin-right:auto; }
+.footer-bottom {
+  max-width:1120px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12.5px; color:rgba(255,255,255,0.3); flex-wrap:wrap; gap:10px;
+}
+.footer-tagline { font-style:italic; color:rgba(255,255,255,0.22); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px) {
+  .hero-inner, .problem-grid, .solution-grid, .scope-grid { grid-template-columns:1fr; gap:44px; }
+  .hero-stats-card { display:none; }
+  .footer-inner { grid-template-columns:1fr; gap:36px; }
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+  .risk-box { padding:32px 28px; flex-direction:column; gap:18px; }
+}
+@media(max-width:600px) {
+  .section { padding:80px 5%; }
+  #hero { padding:100px 5% 60px; }
+  #navbar { padding:0 5%; }
+  .outcomes-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:420px) {
+  .outcomes-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-brand"><img src="https://em-content.zobj.net/source/microsoft/378/globe-with-meridians_1f310.png" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.18))" alt="globe"/> Digital <em>Hope</em> Academy</a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#outcomes">Outcomes</a></li>
+    <li><a href="#scope">Scope</a></li>
+    <li><a href="#risk">Risk</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('scope').scrollIntoView({behavior:'smooth'})">Apply Now</button>
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="#problem" class="mobile-link">The Problem</a>
+  <a href="#solution" class="mobile-link">Our Solution</a>
+  <a href="#outcomes" class="mobile-link">Outcomes</a>
+  <a href="#scope" class="mobile-link">Scope & Goals</a>
+  <a href="#risk" class="mobile-link">Risk</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="badge-dot"></span> Azerbaijan · Social Innovation</div>
+      <h1>Preparing <em>Tomorrow's</em><br/>Digital Professionals</h1>
+      <p class="hero-sub">Digital Hope Academy equips young people from social assistance families with world-class tech skills, local mentorship, and internationally recognized certificates — completely free.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('solution').scrollIntoView({behavior:'smooth'})">Discover Our Model →</button>
+        <button class="btn-outline" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">Learn More</button>
+      </div>
+    </div>
+    <div class="hero-stats-card reveal">
+      <div class="stat-row">
+        <div class="stat-num">15–22</div>
+        <div class="stat-label">Target age group (years)</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:72%"></div></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-row">
+        <div class="stat-num">2×</div>
+        <div class="stat-label">Weekly mentor-led seminars</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:55%"></div></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-row">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Free access for TSSA families</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section class="section" id="problem">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The Challenge</div>
+    <h2 class="section-heading reveal">Why young talent<br/>stays <em>left behind</em></h2>
+    <div class="problem-grid">
+      <div class="reveal">
+        <p class="section-body">In Azerbaijan, children from families receiving social assistance face significant structural barriers that block access to quality digital education — and the economic independence it can bring.</p>
+      </div>
+      <div class="problem-cards">
+        <div class="problem-card reveal reveal-delay-1">
+          <div class="p-icon icon3d-wrap">
+            <img class="icon3d" src="https://em-content.zobj.net/source/microsoft/378/money-with-wings_1f4b8.png" alt="money"/>
+          </div>
+          <div>
+            <h3>Financial Constraints</h3>
+            <p>High subscription and certificate fees on platforms like Coursera and Udemy are entirely out of reach for low-income families, blocking access before learning even begins.</p>
+          </div>
+        </div>
+        <div class="problem-card reveal reveal-delay-2">
+          <div class="p-icon icon3d-wrap">
+            <img class="icon3d" src="https://em-content.zobj.net/source/microsoft/378/globe-with-meridians_1f310.png" alt="globe"/>
+          </div>
+          <div>
+            <h3>Motivation &amp; Language Barriers</h3>
+            <p>Without local mentorship or Azerbaijani-language support, young learners struggle to stay motivated and progress independently in purely online environments.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOLUTION ── -->
+<section class="section section-alt" id="solution">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Our Approach</div>
+    <h2 class="section-heading reveal">A <em>hybrid</em> model that<br/>bridges the gap</h2>
+    <p class="section-body reveal">The cornerstone of Digital Hope Academy is a two-level hybrid mentorship system connecting world-class global content with local, human guidance in Azerbaijani.</p>
+    <div class="solution-grid">
+      <div class="sol-card reveal reveal-delay-1" data-n="01">
+        <span class="sol-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/graduation-cap_1f393.png" alt="graduation cap"/></span>
+        <h3>Global Tech Curricula</h3>
+        <p>Participants independently follow structured programs designed by Google, IBM, and Meta — the same content used to train professionals worldwide, made fully accessible at no cost.</p>
+      </div>
+      <div class="sol-card reveal reveal-delay-2" data-n="02">
+        <span class="sol-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/handshake_1f91d.png" alt="handshake"/></span>
+        <h3>Twice-Weekly Seminars</h3>
+        <p>Local IT professionals host online or in-person hybrid sessions twice a week. Difficult topics are explained in Azerbaijani, and participants tackle real-world practical cases together.</p>
+      </div>
+      <div class="sol-card reveal reveal-delay-3" data-n="03">
+        <span class="sol-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/scroll_1f4dc.png" alt="certificate"/></span>
+        <h3>Internationally Recognized Certificates</h3>
+        <p>Upon completing programs, participants earn certificates from global tech giants — credentials that open doors on the international labor market, not just locally.</p>
+      </div>
+      <div class="sol-card reveal reveal-delay-4" data-n="04">
+        <span class="sol-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/briefcase_1f4bc.png" alt="briefcase"/></span>
+        <h3>Freelance &amp; Remote Pathways</h3>
+        <p>Beyond learning, participants are introduced to concrete freelance and remote work opportunities — enabling them to generate income and support their families during the program.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OUTCOMES ── -->
+<section class="section" id="outcomes">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Expected Impact</div>
+    <h2 class="section-heading reveal">What changes <em>after</em><br/>Digital Hope Academy</h2>
+    <p class="section-body reveal">By equipping young people with real digital skills and income potential, the project works to permanently break the cycle of intergenerational poverty in Azerbaijan.</p>
+    <div class="outcomes-grid">
+      <div class="out-card reveal reveal-delay-1">
+        <span class="out-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/chart-increasing_1f4c8.png" alt="chart"/></span>
+        <h3>Financial Independence</h3>
+        <p>Families reduce dependence on state social assistance as graduates begin earning in the digital economy.</p>
+      </div>
+      <div class="out-card reveal reveal-delay-2">
+        <span class="out-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/trophy_1f3c6.png" alt="trophy"/></span>
+        <h3>Global Competitiveness</h3>
+        <p>Skills aligned with leading tech company standards open doors far beyond the local labor market.</p>
+      </div>
+      <div class="out-card reveal reveal-delay-3">
+        <span class="out-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/brain_1f9e0.png" alt="brain"/></span>
+        <h3>Problem-Solving Skills</h3>
+        <p>Practical, mentor-guided experience builds independently working professionals with strong analytical abilities.</p>
+      </div>
+      <div class="out-card reveal reveal-delay-1">
+        <span class="out-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/balance-scale_2696-fe0f.png" alt="balance"/></span>
+        <h3>Social Justice</h3>
+        <p>Making technology accessible to low-income families actively strengthens equality of opportunity across society.</p>
+      </div>
+      <div class="out-card reveal reveal-delay-2">
+        <span class="out-emoji"><img class="icon3d-lg" src="https://em-content.zobj.net/source/microsoft/378/open-hands_1f450.png" alt="open hands"/></span>
+        <h3>Social Integration</h3>
+        <p>Internationally recognized certificates help participants feel like full, valued members of modern society.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCOPE ── -->
+<section class="section section-alt" id="scope">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Who We Serve</div>
+    <h2 class="section-heading reveal">Built for those who<br/>need it <em>most</em></h2>
+    <div class="scope-grid">
+      <div class="reveal">
+        <p class="section-body">Digital Hope Academy specifically targets young people who have been systematically excluded from quality digital education in Azerbaijan due to economic hardship.</p>
+        <div class="scope-pills">
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/birthday-cake_1f382.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="cake"/> Ages 15–22</div>
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/books_1f4da.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="books"/> Full-time students</div>
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/house_1f3e0.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="home"/> TSSA families</div>
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/flag-azerbaijan_1f1e6-1f1ff.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="az"/> Azerbaijan</div>
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/light-bulb_1f4a1.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="lightbulb"/> "Learn &amp; Apply"</div>
+          <div class="pill"><img src="https://em-content.zobj.net/source/microsoft/378/globe-showing-europe-africa_1f30d.png" style="width:20px;height:20px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))" alt="globe"/> Digital inclusion</div>
+        </div>
+      </div>
+      <div class="scope-visual reveal reveal-delay-2">
+        <div class="scope-item">
+          <div class="scope-dot icon3d-wrap">
+            <img class="icon3d-sm" src="https://em-content.zobj.net/source/microsoft/378/direct-hit_1f3af.png" alt="target"/>
+          </div>
+          <div>
+            <h4>Digital Inclusion</h4>
+            <p>Ensuring access to modern technology regardless of social or economic background.</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-dot icon3d-wrap">
+            <img class="icon3d-sm" src="https://em-content.zobj.net/source/microsoft/378/scroll_1f4dc.png" alt="scroll"/>
+          </div>
+          <div>
+            <h4>Certification</h4>
+            <p>Internationally recognized certificates from world-leading tech companies at zero cost.</p>
+          </div>
+        </div>
+        <div class="scope-item">
+          <div class="scope-dot icon3d-wrap">
+            <img class="icon3d-sm" src="https://em-content.zobj.net/source/microsoft/378/briefcase_1f4bc.png" alt="briefcase"/>
+          </div>
+          <div>
+            <h4>Employment Potential</h4>
+            <p>Freelance and remote work pathways that enable participants to contribute to family income during training.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RISK ── -->
+<section class="section" id="risk">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Risk Assessment</div>
+    <h2 class="section-heading reveal">Identified <em>challenges</em><br/>we are managing</h2>
+    <div class="risk-wrapper reveal reveal-delay-1">
+      <div class="risk-box">
+        <div class="risk-emoji"><img src="https://em-content.zobj.net/source/microsoft/378/warning_26a0-fe0f.png" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2))" alt="warning"/></div>
+        <div>
+          <h3>Changing TSSA Eligibility Status</h3>
+          <p>Since the project targets children from families receiving Targeted State Social Assistance, a family's eligibility status may change or be discontinued during the program period. Removing a participant mid-program risks interrupting their educational journey at a critical stage of skill and confidence development.</p>
+          <span class="risk-tag">Risk: TSSA Eligibility Changes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h2><img src="https://em-content.zobj.net/source/microsoft/378/globe-with-meridians_1f310.png" style="width:30px;height:30px;object-fit:contain;vertical-align:middle;margin-right:8px;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.2))" alt="globe"/> Digital <em>Hope</em> Academy</h2>
+      <p>Preparing children from social assistance families to become competitive professionals in the global digital labor market — one certificate at a time.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Programme</h4>
+      <ul>
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#solution">Our Solution</a></li>
+        <li><a href="#outcomes">Expected Outcomes</a></li>
+        <li><a href="#scope">Scope &amp; Goals</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Partners</h4>
+      <ul>
+        <li><a href="#">Google Career Certificates</a></li>
+        <li><a href="#">IBM SkillsBuild</a></li>
+        <li><a href="#">Meta Blueprint</a></li>
+        <li><a href="#">Local IT Professionals</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom">
+    <span>© 2025 Digital Hope Academy · Azerbaijan</span>
+    <span class="footer-tagline">"Learn and Apply" — breaking the cycle of intergenerational poverty</span>
+  </div>
+</footer>
+
+<script>
+  // ── Navbar scroll effect
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ── Mobile menu toggle
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // ── Scroll-triggered reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.13 });
+  revealEls.forEach(function(el) { observer.observe(el); });
+
+  // ── Smooth scroll for all anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
